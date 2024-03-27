@@ -1,0 +1,27 @@
+<header class="shop-header">
+    <nav class="wrapper">
+        <a href="" class="side-menu--toggle" @click.prevent="showSideMenu=true">
+            <svg role="img" title="menu icon"><use xlink:href="#menu"/></svg>
+            <span class="text-label">{{ lang.menu }}</span>
+        </a>
+        {% if template == "index" %}<h1 class="logo" style="line-height:40px;margin:0;">{% endif %}
+            <a class="{% unless template == "index" %}logo{% endunless %}" href="/">
+            {% if settings.logo_use_image %}
+                <img src="{{ 'logo.png' | asset_url }}" alt="logo" tabindex="1">
+            {% else %}
+    			 <span>{{ site.name }}</span>
+    		{% endif %}
+        </a>
+        {% if template == "index" %}</h1>{% endif %}
+        {% unless settings.search_hide %}
+            <a href="/search" class="search--toggle" tabindex="3">
+                <svg role="img" title="cancel icon"><use xlink:href="#search-icon-2"/></svg>
+                <span class="text-label">{{ lang.search | def: "Search" }}</span>
+            </a>
+            <form action="/search" name="search" method="get" class="search--form">
+               <input type="search" name="q" placeholder="Search"><button><svg role="img" title="search icon"><use xlink:href="#search-icon-2"/></svg></button>
+            </form>
+        {% endunless %}
+        {% include 'main-nav' %}
+    </nav>
+</header>

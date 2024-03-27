@@ -1,0 +1,9 @@
+<ul class="pagination-custom">
+    {% if paginate.previous %}
+        <li><a href="{{ paginate.previous.url }}{{ pagination-custom }}" title="{{ paginate.previous.title }}">&larr;</a></li>
+    {% endif %}
+    <li>{{ paginate.current_page }} / {{ paginate.pages }}</li>
+    {% if paginate.next %}
+        <li><a href="{{ paginate.next.url }}{{ pagination-custom }}" title="{{ paginate.next.title }}">&rarr;</a></li>
+    {% endif %}
+</ul>

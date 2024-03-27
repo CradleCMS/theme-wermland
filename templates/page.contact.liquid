@@ -1,0 +1,49 @@
+<div class="grid wrapper">
+
+	<div class="grid-item large--two-thirds push--large--one-sixth">
+
+		<h1>{{ meta.h1 }}</h1>
+
+		<div class="rte">
+			{{ page.html }}
+		</div>
+		<div> 
+			{% form 'contact' id:'contact-form' %}
+                {% include 'form-errors-custom' %}
+				
+				{% if form.success %}
+					<p class="note form-success">
+					    {{ lang.thanks_for_contacting_us | def: "Thanks for contacting us! We'll get back to you as soon as possible." }}
+					</p>
+                {% else %}
+				<div id="contactFormWrapper">
+					<label for="contactFormName" class="hidden-label">{{ lang.name | def: 'Name' }}</label>
+					<input type="text" id="contactFormName" required name="name" placeholder="{{ lang.name | def: 'Name' | escape }}" autocapitalize="words" value="{% if form.name %}{{ form.name }}{% elseif customer %}{{ customer.name }}{% endif %}">
+
+					<label for="contactFormEmail" class="hidden-label">{{ lang.email | def: 'E-mail' }}</label>
+					<input type="email" id="contactFormEmail" required name="email" placeholder="{{ lang.email | def: 'E-mail' | escape }}" autocorrect="off" autocapitalize="off" value="{% if form.email %}{{ form.email }}{% elseif customer %}{{ customer.email }}{% endif %}">
+
+					<label for="contactFormPhone" class="hidden-label">{{ lang.phone | def: 'Phone' }}</label>
+					<input type="tel" id="contactFormPhone" required name="phone" placeholder="{{ lang.phone | def: 'Phone' | escape }}" value="{% if form.phone %}{{ form.phone }}{% elseif customer %}{{ customer.defaultAddress.phone }}{% endif %}">
+
+					<label for="contactFormSubject" class="hidden-label">{{ lang.name | def: 'Name' }}</label>
+					<input type="text" id="contactFormSubject" required name="validation" placeholder="{{ lang.subject | def: 'Subject' | escape }}" autocapitalize="words" value="{% if form.subject %}{{ form.subject }}{% endif %}">
+
+					<label for="contactFormMessage" class="hidden-label">{{ lang.message | def: 'Message' }}</label>
+					<textarea rows="10" id="contactFormMessage" required name="message" placeholder="{{ lang.message | def: 'Message' | escape }}">{% if form.body %}{{ form.body }}{% endif %}</textarea>
+
+					<input type="submit" class="btn right" value="{{ lang.submit | def: 'Send' | escape }}">
+				</div>
+				{% endif %}
+				{% if form.success or form.errors %}
+				<script>
+				    location.hash = '#contact-form';
+				</script>
+				{% endif %}
+
+			{% endform %}
+		</div>
+
+	</div>
+
+</div>

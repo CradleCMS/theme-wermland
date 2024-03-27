@@ -1,0 +1,89 @@
+{% if collection.products_count > 0 %}
+    <div class="grid">
+        {% if collection.all_types.size > 1 and settings.enable_type_filter %}
+        <div class="grid-item  small--one-half medium--one-third large--one-fifth">
+            <select class="show-type-filter">
+                <option value="">{{ lang.all }} {{ lang.product_types | downcase }} ({{collection.all_types.size}})</option>
+            	{% for type in collection.all_types %}
+            		{% if current_type == type %}
+            			<option selected="selected" class="active-filter">{{ type }}</option>
+            		{% else %}
+            			<option value="{{ type | handleize }}">{{ type }}</option>
+            		{% endif %}
+            	{% endfor %}
+            </select>
+            <script>
+                $(function() {
+                    $('.show-type-filter').on('change', function() {
+                        window.location.hash = "";
+                        shop.queryParams.page = "";
+                        shop.queryParams.vendor = "";
+                        shop.queryParams.tags = "";
+                        shop.queryParams.type = $(this).val();
+                        location.search = $.param(shop.queryParams).replace(/\+/g, '%20');
+                    });
+                });
+            </script>
+        </div>
+        {% endif %}
+        {% if collection.all_vendors > 1 and settings.enable_vendor_filter %}
+        <div class="grid-item  small--one-half medium--one-third large--one-fifth">
+            <select class="vendor-filter">
+                <option value="">{{ lang.all }} {{ lang.vendors | downcase }} ({{collection.all_vendors.size}})</option>
+                {% for vendor in collection.all_vendors %}
+                {{ vendor | print_r }}
+                {% if current_vendor == vendor %}
+        			<option selected="selected" class="active-filter">
+        				{{ vendor }}
+        			</option>
+        		{% else %}
+        			<option value="{{ vendor | handleize }}">
+        				{{ vendor }}
+        			</option>
+        		{% endif %}
+                {% endfor %}
+            </select>
+            <script>
+                $(function() {
+                    $('.vendor-filter').on('change', function() {
+                        window.location.hash = "";
+                        shop.queryParams.page = "";
+                        shop.queryParams.type = "";
+                        shop.queryParams.tags = "";
+                        shop.queryParams.vendor = $(this).val();
+                        location.search = $.param(shop.queryParams).replace(/\+/g, '%20');
+                    });
+                });
+            </script>
+        </div>
+        {% endif %}
+        <div class="grid-item  small--one-half medium--one-third large--one-fifth">
+            <select id="sortBy" class="">
+                <option value="manual">{{ lang.featured | def:'Featured' }}</option>
+                <option value="price-asc">{{ lang.price_low_to_high | def:'Price, low to high' }}</option>
+                <option value="price-desc">{{ lang.price_high_to_low | def:'Price, high to low' }}</option>
+                <option value="title-asc">{{ lang.alpha_a_z | def:'Alphabetically, A-Z' }}</option>
+                <option value="title-desc">{{ lang.alpha_z_a | def:'Alphabetically, Z-A' }}</option>
+                {% comment %}
+                    2 more available options
+                    <option value="published-asc">{{ lang.published_new_to_old | def:'Published, latest to oldest' }}</option>
+                    <option value="published-desc">{{ lang.published_old_to_new | def:'Published, oldest to latest' }}</option>
+                {% endcomment %}
+                <option value="created-asc">{{ lang.date_old_to_new | def:'Date, old to new' }}</option>
+                <option value="created-desc">{{ lang.date_new_to_old | def:'Date, new to old' }}</option>
+                <option value="bestseller">{{ lang.best_selling | def:'Best Selling' }}</option>
+                {% if shop.product_reviews_enabled %}
+                <option value="bestrated">{{ lang.best_rated | def:'Best Rated' }}</option>
+                {% endif %}
+            </select>
+        </div>
+        <script>
+            $(function() {
+                $('#sortBy').val('{{ current_sorting }}').on('change', function() {
+                    shop.queryParams.sorting = $(this).val();
+                    location.search = $.param(shop.queryParams).replace(/\+/g, '%20');
+                });
+            });
+        </script>
+    </div>
+{% endif %}

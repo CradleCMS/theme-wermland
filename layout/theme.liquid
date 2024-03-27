@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]><html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if IE 9 ]><html class="ie9 no-js"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8" />
+        <!--[if IE]><meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1' /><![endif]-->
+        <title>
+        	{{ site.name }} {% if meta.title != blank and meta.title != site.name %} | {{meta.title}}{% endif %}
+        </title>	
+        {% if metaDescription %}
+        <meta name="description" content="{{ metaDescription | escape }}" />
+        {% endif %}
+        {% if metaKeywords %}
+        <meta name="keywords" content="{{ metaKeywords | escape }}" />
+        {% endif %}
+        <link rel="canonical" href="{{ canonicalUrl }}" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        {% include 'open-graph-tags' %}
+        {% include 'twitter-card' %}
+        {% if settings.favicon_enable %}
+            <link rel="icon" href="{{ 'favicon.ico' | asset_img_url }}" sizes="any">
+            <link rel="icon" type="image/png" sizes="16x16" href="{{ 'favicon.png' | asset_img_url:'16','16' }}">
+            <link rel="icon" type="image/png" sizes="32x32" href="{{ 'favicon.png' | asset_img_url:'32','32' }}">
+            <link rel="icon" href="{{ 'icon.svg' | asset_img_url }}" type="image/svg+xml">
+            <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+            <link rel="manifest" href="{{ 'manifest.json' | asset_url }}">
+            
+            <meta name="msapplication-TileColor" content="#da532c">
+            <meta name="theme-color" content="#ffffff">
+        {% endif %}
+        {{ 'grid.css' | asset_url | stylesheet_tag }}
+        {{ 'normalize.css' | asset_url | stylesheet_tag }}
+        {{ 'site.css.liquid' | asset_url | stylesheet_tag }}
+
+       {{ content_for_header }}
+        {% if settings.cookie_consent_enabled %}
+            {% include 'cookie-consent' %}
+        {% endif %}
+    </head>
+    <body x-data="{showSideMenu:false}" id="{{ meta.title | handle }}" class="{% if customer %}customer-logged-in {% endif %}template-{{ template | replace: '.', ' ' | split: ' ' | first | handle }}" :class="{'side-menu--open':showSideMenu}" >
+        {% include 'svg-sprite' %}
+        <div style="display: flex;flex-direction: column;justify-content: flex-end;min-height: 100vh;">
+            {% include 'header' %}
+            <section class="main-content" role="main" style="flex-grow: 4;">
+                {{ contentForLayout }}
+            </section>
+            {% include 'footer' %}
+        </div>
+        <a href="#" class="modal-background">
+        </a>
+        {{ 'alpine.min.js' | asset_url | script_tag }}
+        {{ 'vendors.js' | asset_url | script_tag }}
+        {{ 'vanilla-slick.js' | asset_url | script_tag }}
+        {% comment %}
+        {{ 'shop.js' | asset_url | script_tag }}
+        {% endcomment %}
+        {% if settings.cookie_consent_enabled %}
+            {% include 'cookie-consent' %}
+        {% endif %}
+    </body>
+</html>

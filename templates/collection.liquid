@@ -1,0 +1,134 @@
+{% capture products_count %}small--one-half medium--one-third large--one-{{ settings.collection_products_count | def: "fifth" }}{% endcapture %}
+
+{% paginate collection.products by 50 %}
+{% if settings.collection-page-image-full-width and collection.image.src != blank %}
+<div class="wrapper">
+    {% include 'breadcrumbs' %}
+	<img src="{{ collection.image.src | collection_img_url }}" alt"{{ collection.image.alt }}">
+</div>
+{% endif %}
+<div class="wrapper">
+	<header class="section-header grid">
+	    {% unless settings.collection-page-image-full-width or collection.image.src == blank %}
+	    <div class="grid-item small--one-whole medium--one-half large--one-quarter ">
+	        <img src="{{ collection.image.src | collection_img_url }}" alt"{{ collection.image.alt }}">
+	    </div>
+	    {% endunless %}
+	    {% unless settings.collection-page-image-full-width or collection.image.src == blank %}
+	    <div class="grid-item small--one-whole medium--one-half large--three-quarters ">
+	    {% else %}
+	    <div class="grid-item one-whole">
+	    {% endunless %}
+            <h1 class="section-header--title">
+    		    {{ meta.h1 }}{% if currentType %} – {{ currentType }}{% endif %}{% if currentVendor %} – {{ currentVendor }}{% endif %}
+    		</h1>
+    	    <div class="rte rte--header">
+    	        {% if collection.html contains '<!-- split -->' %}
+        	    <div class="rte rte--header margin-none rm" aria-expanded="false">
+        		      {{ collection.html | split: '<!-- split -->' | first }} <!--a href="#more-collection-content" class="read-more-link">{{ lang.read_more | def: "Read more"}}</a-->
+        		</div>
+        		{% else %}
+    			<div class="readmore-wrapper rte rte--header margin-none rm" aria-expanded="false">
+        			{{ collection.html }}
+            	</div>
+        		{% endif%}
+    		</div>
+    	</div>
+	</header>
+	<div class="section-header filter--wrapper ">
+	    {% if settings.enable_collection_filters %}
+	    <label class="filter-toggle" for="filter-toggle">
+	        {{ lang.filters }}
+            <svg width="35px" height="25px" viewBox="0 0 35 25" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                <path d="M24,15 C26.4188915,15 28.4366008,16.7176654 28.8999437,18.999812 L35,19 L35,21 L28.8997409,21.0011864 C28.4360122,23.2828356 26.4185387,25 24,25 C21.5814613,25 19.5639878,23.2828356 19.1002591,21.0011864 L0,21 L0,19 L19.1000563,18.999812 C19.5633992,16.7176654 21.5811085,15 24,15 Z M24,17 C22.3431458,17 21,18.3431458 21,20 C21,21.6568542 22.3431458,23 24,23 C25.6568542,23 27,21.6568542 27,20 C27,18.3431458 25.6568542,17 24,17 Z M11,0 C13.4188915,0 15.4366008,1.71766536 15.8999437,3.99981203 L15.8999437,3.99981203 L35,4 L35,6 L15.8997409,6.0011864 C15.4360122,8.2828356 13.4185387,10 11,10 C8.58146126,10 6.56398776,8.2828356 6.10025909,6.0011864 L6.10025909,6.0011864 L0,6 L0,4 L6.10005628,3.99981203 C6.56339924,1.71766536 8.5811085,0 11,0 Z M11,2 C9.34314575,2 8,3.34314575 8,5 C8,6.65685425 9.34314575,8 11,8 C12.6568542,8 14,6.65685425 14,5 C14,3.34314575 12.6568542,2 11,2 Z" id="Combined-Shape"></path>
+            </svg>
+	    </label>
+	    {% endif %}
+	    {% if settings.enable_collection_sort_order %}
+	    <div class="sort-wrapper">
+            <select id="sortBy" class="">
+                <option value="manual">{{ lang.featured | def:'Featured' }}</option>
+                <option value="price-asc">{{ lang.price_low_to_high | def:'Price, low to high' }}</option>
+                <option value="price-desc">{{ lang.price_high_to_low | def:'Price, high to low' }}</option>
+                <option value="title-asc">{{ lang.alpha_a_z | def:'Alphabetically, A-Z' }}</option>
+                <option value="title-desc">{{ lang.alpha_z_a | def:'Alphabetically, Z-A' }}</option>
+                {% comment %}
+                    2 more available options
+                    <option value="published-asc">{{ lang.published_new_to_old | def:'Published, latest to oldest' }}</option>
+                    <option value="published-desc">{{ lang.published_old_to_new | def:'Published, oldest to latest' }}</option>
+                {% endcomment %}
+                <option value="created-asc">{{ lang.date_old_to_new | def:'Date, old to new' }}</option>
+                <option value="created-desc">{{ lang.date_new_to_old | def:'Date, new to old' }}</option>
+                <option value="bestseller">{{ lang.best_selling | def:'Best Selling' }}</option>
+                {% if shop.product_reviews_enabled %}
+                <option value="bestrated">{{ lang.best_rated | def:'Best Rated' }}</option>
+                {% endif %}
+            </select>
+        </div>
+        <script>
+            $(function() {
+                $('#sortBy').val('{{ current_sorting }}').on('change', function() {
+                    shop.queryParams.sorting = $(this).val();
+                    location.search = $.param(shop.queryParams).replace(/\+/g, '+');
+                });
+            });
+        </script>
+        {% endif %}
+        {% if settings.enable_collection_filters %}
+        <div class="active-filters">
+            {% comment %}
+            {% if currentType or currentVendor or currentTags %}
+                <a href="{{ collection | url}}">{{ lang.remove }} {{ lang.all }}</a>
+            {% endif %}
+            {% endcomment %}
+    	    {{ currentType | link_to_remove_type: type }}
+    	    {{ currentVendor | link_to_remove_vendor: vendor }}
+	    </div>
+	    <input type="checkbox" id="filter-toggle" aria-hidden="hidden">
+  		<div class="section-header-filters">
+  			{% include 'collection-sidebar' %}
+  		</div>
+  		{% endif %}
+	</div>
+</div>
+<div class="grid wrapper">
+	<div class="grid-item small--one-half medium--one-third large--one-quarter hide">
+		{% comment %}{% include 'collection-sidebar' %}{% endcomment %}
+	</div>
+
+	<div class="grid-item">
+		<div class="grid-uniform">
+
+			{% comment %}
+				Loop through our products in the current collection.
+				See the snippet 'product-grid-item' for the layout.
+			{% endcomment %}
+			{% if collection.products.size > 0 %}
+    			{% for product in collection.products %}
+    			    {% include 'product-card' grid_item_width:products_count %}
+    			{% endfor %}
+    		{% else %}
+				<div class="grid-item">
+					<p>{{ lang.no_products_found | def:'No products found'}}</p>
+				</div>
+			{% endif %}
+		</div>
+		{% if paginate.pages > 1 %}
+			<hr>
+			<div class="text-center">
+				{% include 'pagination-custom' %}
+			</div>
+		{% endif %}
+
+	</div>
+
+</div>
+
+{% endpaginate %}
+{% if collection.content contains '<!-- split -->' %}
+<div id="more-collection-content" class="grid section-header">
+    <div class="wrapper rte-header">
+        {{ collection.content | split: '<!-- split -->' | last }}
+    </div>
+</div>
+{% endif %}

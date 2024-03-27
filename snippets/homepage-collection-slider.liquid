@@ -1,0 +1,57 @@
+{% if settings.homepage_collection_slider_enabled %}
+    {% assign product_amount = settings.homepage_collection_amount %}
+    <section class="wrapper">
+    <h2 class="collection-title">{{ collections[settings.homepage_collection].title }}</h2>
+    <div class="grid fontpage-collection">
+    	{% comment %}
+    		Loop through products in your Frontpage collection.
+    		This collection is created by default, but you must add products to it.
+    	{% endcomment %}
+    	{% if collections[settings.homepage_collection].products_count > 0 %}
+    	    {% if collections[settings.homepage_collection].products_count > 5 and settings.homepage_collection_slider_enabled %}
+    	    <button type="button" class="slick-prev"><svg role="img" title="arrow left" class="arrow left"><use xlink:href="#arrow"/></svg></button>
+    	    <div class="{% if settings.homepage_collection_slider_enabled %}collection_slider{% endif %}" data-slick='{"slidesToShow": 5, "slidesToScroll": 5, "arrows": true, "responsive": [ { "breakpoint": 768, "settings": { "slidesToShow": 3, "slidesToScroll": 3 } }, { "breakpoint": 480, "settings": {"slidesToShow": 2, "slidesToScroll": 2 } } ]}'>
+    	    {% endif %}
+        	{% for product in collections[settings.homepage_collection].products limit: product_amount %}
+        		{% comment %}
+        			Change the grid item width by using classes from the grid in
+        			the grid_item_width variable.
+        
+        			Example:
+        				- {% assign grid_item_width = 'large--one-third medium--one-half' %}
+        		{% endcomment %}
+        		{% assign grid_item_width = 'large--one-fifth medium--one-half small--one-half' %}
+        		{% include 'product-card' %}
+        	{% endfor %}
+        	{% if collections[settings.homepage_collection].products_count > 5 and settings.homepage_collection_slider_enabled %}
+            </div>
+            <button type="button" class="slick-next"><svg role="img" title="arrow right" class="arrow right"><use xlink:href="#arrow"/></svg></button>
+            {% endif %}
+        {% elseif settings.homepage_collection == "" %}
+            {% for i in (1..product_amount) %}
+                {% include 'product-card' with_placeholder:true %}
+            {% endfor %}
+    	{% else %}
+    		<div class="grid-item">
+    			<p><a href="/admin/products">{{ lang.no_products_found | def:'No products found' }}</a></p>
+    		</div>
+    	{% endif %}
+    </div>
+    <a class="collection-button" href="{{ collections[settings.homepage_collection].url }}">{{ lang.browse }} {{ collections[settings.homepage_collection].title }}</a>
+    <hr>
+    {% if settings.homepage_collection_slider_enabled %}
+    <script type="text/javascript">
+        $(function() {
+        $(".collection_slider").slick({
+                slidesToShow: 1,
+                dots: true,
+                infinite: true,
+                prevArrow: ".slick-prev",
+                nextArrow: ".slick-next",
+                autoplay: {{ settings.slideshow_autoplay | def: "false" }}
+            });
+        });
+    </script>
+    {% endif %}
+</section>
+{% endif %}

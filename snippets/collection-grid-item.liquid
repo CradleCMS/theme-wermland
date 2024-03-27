@@ -1,0 +1,17 @@
+{% comment %}
+    Set the default collection_item_width if no variable is set
+{% endcomment %}
+{% unless collection_item_width %}
+    {% assign collection_item_width = 'small--one-half medium--one-third large--one-fifth' %}
+{% endunless %}
+{% let c = collections[collection.id] %}    
+<div class="grid-item {{collection_item_width}} text-center">
+    <a href="{{ c.url }}" class="collection-grid-image">
+        {% unless c.image.src == "" %}
+            {{ c | collection_img_url: 'large','whitefit' | img_tag: c.title }}
+        {% endunless %}
+    </a>
+    <a href="{{ c.url }}">
+        {{ c.meta.h1 }}
+    </a>
+</div>

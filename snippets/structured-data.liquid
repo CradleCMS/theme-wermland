@@ -1,0 +1,65 @@
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org/",
+    "@type": "Product",
+	"name": "{{ product.title }}",
+	"description": "{{ product.content | strip_html }}",
+	"image": [
+	    {% for image in product.images %}
+	    "{{ image.src | remove: "//" }}"{% unless forloop.last %},{% endunless %}
+	    {% endfor %}
+    ],
+	"url":"{{ shop.url }}{{ product.url }}",
+	"gtin13": "{{ product.selected_variant.barcode }}",
+	"sku": "{{ product.selected_variant.sku }}",
+	"productID": "{{ product.id }}",
+	"offers": {
+        "@type": "Offer",
+        "price": "{{ product.price }}",
+        "priceCurrency": "{{ shop.currency }}",
+        "url": "{{ shop.url }}{{ product.url }}",
+        "availability": "http://schema.org/{% if product.available %}InStock{% else %}OutOfStock{% endif %}"
+    },
+	{% if product.selected_variant.weight > 0 %}
+	"weight": {
+		"value": "{{ product.selected_variant.weight }}",
+		"unitText": "GRM",
+		"@type": "QuantitativeValue"
+	},
+	{% endif %}
+	"brand": {
+		"name": "{{ product.vendor }}",
+		"url": "{{ shop.url }}/collections/all/?vendor={{ product.vendor | handleize }}",
+		"@type": "Brand"
+	}
+	{% if product.reviews_count > 0 %}
+	,
+	"aggregateRating": {
+		"ratingValue": "{{ product.reviews_rating }}",
+		"bestRating": "5",
+		"worstRating": "1",
+		"reviewCount": "{{ product.reviews_count }}",
+		"@type": "AggregateRating"
+	},
+    "review": [
+        {% for review in product.reviews %}
+        {
+            "@type": "Review",
+            "reviewBody": "{{ review.body }}",
+            "datePublished": "{{ review.created_at | date: 'Y-m-d' }}",
+            "reviewRating": {
+                "@type": "Rating",
+                "bestRating": "5",
+    		    "worstRating": "1",
+                "ratingValue": "{{ review.rating }}"
+            },
+            "author": {
+                "@type": "Person",
+                "name": "{{ review.author }}"
+            }
+        }{% unless forloop.last %},{% endunless %}
+        {% endfor %}
+    ]
+	{% endif %}
+}
+</script>

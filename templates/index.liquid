@@ -1,0 +1,428 @@
+{% let homepage_page_position = settings.homepage_page_position | def: "bottom" %}
+
+{% if settings.show_slideshow %}
+    {% let slides = settings.slideshow_slides %}
+    <section class="hero-slider">
+        
+        {% if slides.size > 0 %}
+            <div class="{% if slides.size > 1 %}slider{% endif %}">
+                {% for slide in settings.slideshow_slides %}
+                    {% capture slide_img %}slide_{{ forloop.index0 }}.jpg{% endcapture %}
+                    <a class="slide-link lazyload" href="{{ slide.slide_link_url }}" data-bgset="{{ slide_img | asset_img_url:'480','0' }}  [(max-width:768px)] | {{ slide_img | asset_img_url:'768','0' }} [(max-width:1024px)] | {{ slide_img | asset_img_url:'1200','0' }}">
+                        <div class="wrapper  v-pos-{{ slide.slide_content_vertical_pos | def: "center" }}  h-pos-{{ slide.slide_content_horizontal_pos | def: "center" }}">
+                            <div class="slide-text-wrapper text-align-{{ slide.slide_button_alignment }}">
+                            {% if slide.slide_heading.size > 0 %}
+                                <span class="h1">{{ slide.slide_heading | def: "hello world" }}</span>
+                            {% endif %}
+                            {% if slide.slide_text.size > 0 %}
+                                <p>{{ slide.slide_text | def: "hello world" }}</p>
+                            {% endif %}
+                            {% if slide.slide_button_caption.size > 0 %}
+                                <div class="slide-btn-wrapper text-{{ slide.slide_button_alignment }}">
+                                    <span class="">{{ slide.slide_button_caption }}</span>
+                                </div>
+                            {% endif %}
+                            </div>
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="">
+                <a class="slide-link lazyload" href="#" data-bgset="{{ '/holder/collections.svg#clothes' }}" style="background-color: #fafafa; background-size: 100%;">
+                    <div class="wrapper v-pos-center h-pos-center">
+                        <div class="slide-text-wrapper text-align-center">
+                            <span class="h1">Image slide</span>
+                            <p>Tell your brand's story through video and images</p>
+                            <div class="slide-btn-wrapper text-center">
+                                <span class="">Read more</span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        {% endif %}
+
+    </section>
+    
+    {% if slides.size > 1 %}
+    <script type="text/javascript">
+      Array.prototype.map.call(document.getElementsByClassName("slider"),(slider) => {
+        let slick = new Slick(slider,{
+            slidesToShow: 1,
+            dots: true,
+            infinite: true,
+            prevArrow: ".slick-prev",
+            nextArrow: ".slick-next"
+        });
+        slick();
+      });
+    </script>
+    {% endif %}
+{% endif %}
+
+{% if settings.homepage_page_show %}
+    {% if homepage_page_position == 'top' %}
+    <section class="homepage-page top wrapper">
+        {% let p = pages[settings.homepage_page] %}
+        <h2>{{ p.meta.h1 }}</h2>
+        <div class="rte">
+            {{ p.html }}
+        </div>
+    </section>
+    {% endif %}
+{% endif %}
+
+{% if settings.section_banner1_show %}
+    <section class="section-banners wrapper grid margin-top padding-more-bottom  row-1">
+        {% if settings.section_banner1.size > 0 %}
+        {% assign linkIndex = settings.section_banner1.size %}
+            {% case linkIndex %}
+              {% when 1 %}
+                {% assign featured_links_width = 'one-whole' %}
+                {% assign featured_links_size = '1024_0' %}
+              {% when 2 %}
+                {% assign featured_links_width = 'one-half small--one-whole' %}
+                {% assign featured_links_size = '640_0' %}
+              {% when 3 %}
+                {% assign featured_links_width = 'small--one-whole medium--one-half one-third' %}
+                {% assign featured_links_size = '480_0' %}
+              {% when 4 %}
+                {% assign featured_links_width = 'small--one-whole medium--one-half one-quarter' %}
+                {% assign featured_links_size = '480_0' %}
+              {% when 5 %}
+                {% assign featured_links_width = 'small--one-whole medium--one-third large--one-fifth' %}
+                {% assign featured_links_size = '480_0' %}
+              {% when 6 %}
+                {% assign featured_links_width = 'small--one-whole medium--one-third large--one-sixth' %}
+                {% assign featured_links_size = '480_0' %}
+            {% endcase %}
+        
+            {% for links in settings.section_banner1 %}
+                <div class="featured-links grid-item {{ featured_links_width }} image-{{ forloop.index }}">
+                {% capture link_img %}section_banner1_{{ forloop.index0 }}.jpg{% endcapture %}
+                {% if links.link_url != "" %}
+                <a href="{{ links.link_url }}">
+                    <img class="lazyload" src="{{ link_img | asset_img_url: featured_links_size }}">
+                    {% if links.link_title != "" %}<h4 class="h4">{{ links.link_title }}</h4>{% endif %}
+                    {% if links.link_text != "" %}<p>{{ links.link_text }}</p>{% endif %}
+                </a>
+                {% else %}
+                <span>
+                  <img class="lazyload" src="{{ link_img | asset_img_url: featured_links_size }}">
+                  {% if links.link_title != "" %}<h4 class="h4">{{ links.link_title }}</h4>{% endif %}
+                  {% if links.link_text != "" %}<p>{{ links.link_text }}</p>{% endif %}
+                </span>
+                {% endif %}
+                </div>
+            {% endfor %}
+        {% else %}
+            {% include 'placeholder-section-banner' %}
+        {% endif %}
+    </section>
+{% endif %}
+
+{% if settings.section_banner2_show %}
+    <section class="section-banners wrapper grid margin-top padding-more-bottom  row-2">
+        {% if settings.section_banner2.size > 0 %}
+        {% assign linkIndex = settings.section_banner2.size %}
+        {% case linkIndex %}
+          {% when 1 %}
+            {% assign featured_links_width = 'one-whole' %}
+            {% assign featured_links_size = '1024_0' %}
+          {% when 2 %}
+            {% assign featured_links_width = 'one-half small--one-whole' %}
+            {% assign featured_links_size = '640_0' %}
+          {% when 3 %}
+            {% assign featured_links_width = 'small--one-whole medium--one-half one-third' %}
+            {% assign featured_links_size = '480_0' %}
+          {% when 4 %}
+            {% assign featured_links_width = 'small--one-whole medium--one-half one-quarter' %}
+            {% assign featured_links_size = '480_0' %}
+          {% when 5 %}
+            {% assign featured_links_width = 'small--one-whole medium--one-third large--one-fifth' %}
+            {% assign featured_links_size = '480_0' %}
+          {% when 6 %}
+            {% assign featured_links_width = 'small--one-whole medium--one-third large--one-sixth' %}
+            {% assign featured_links_size = '480_0' %}
+        {% endcase %}
+        
+        {% for links in settings.section_banner2 %}
+            <div class="featured-links grid-item {{ featured_links_width }} image-{{ forloop.index }}">
+            {% capture link_img %}section_banner2_{{ forloop.index0 }}.jpg{% endcapture %}
+            {% if links.link_url != "" %}
+            <a href="{{ links.link_url }}">
+                <img class="lazyload" src="{{ link_img | asset_img_url:featured_links_size }}">
+                {% if links.link_title != "" %}<h4 class="h4">{{ links.link_title }}</h4>{% endif %}
+                {% if links.link_text != "" %}<p>{{ links.link_text }}</p>{% endif %}
+            </a>
+            {% else %}
+            <span>
+              <img class="lazyload" src="{{ link_img | asset_img_url:featured_links_size }}>
+              {% if links.link_title != "" %}<h4 class="h4">{{ links.link_title }}</h4>{% endif %}
+              {% if links.link_text != "" %}<p>{{ links.link_text }}</p>{% endif %}
+            </span>
+            {% endif %}
+            </div>
+        {% endfor %}
+        {% else %}
+            {% include 'placeholder-section-banner' %}
+        {% endif %}
+    </section>
+{% endif %}    
+
+{% if settings.section_banner3_show %}    
+    
+    <section class="section-banners wrapper grid margin-top padding-more-bottom row-3">
+        {% if settings.section_banner3.size > 0 %}
+        {% assign linkIndex = settings.section_banner3.size %}
+            {% case linkIndex %}
+              {% when 1 %}
+                {% assign featured_links_width = 'one-whole' %}
+                {% assign featured_links_size = '1024_0' %}
+              {% when 2 %}
+                {% assign featured_links_width = 'one-half small--one-whole' %}
+                {% assign featured_links_size = '640_0' %}
+              {% when 3 %}
+                {% assign featured_links_width = 'small--one-whole medium--one-half one-third' %}
+                {% assign featured_links_size = '480_0' %}
+              {% when 4 %}
+                {% assign featured_links_width = 'small--one-whole medium--one-half one-quarter' %}
+                {% assign featured_links_size = '480_0' %}
+              {% when 5 %}
+                {% assign featured_links_width = 'small--one-whole medium--one-third large--one-fifth' %}
+                {% assign featured_links_size = '480_0' %}
+              {% when 6 %}
+                {% assign featured_links_width = 'small--one-whole medium--one-third large--one-sixth' %}
+                {% assign featured_links_size = '480_0' %}
+            {% endcase %}
+        
+            {% for links in settings.section_banner3 %}
+                <div class="featured-links grid-item {{ featured_links_width }} image-{{ forloop.index }}">
+                {% capture link_img %}section_banner3_{{ forloop.index0 }}.jpg{% endcapture %}
+                {% if links.link_url != "" %}
+                <a href="{{ links.link_url }}">
+                    <img class="lazyload" src="{{ link_img | asset_img_url:featured_links_size }}">
+                    {% if links.link_title != "" %}<strong class="h4">{{ links.link_title }}</strong>{% endif %}
+                    {% if links.link_text != "" %}<p>{{ links.link_text }}</p>{% endif %}
+                </a>
+                {% else %}
+                <span>
+                  <img class="lazyload" src="{{ link_img | asset_img_url:featured_links_size }}">
+                  {% if links.link_title != "" %}<strong class="h4">{{ links.link_title }}</strong>{% endif %}
+                  {% if links.link_text != "" %}<p>{{ links.link_text }}</p>{% endif %}
+                </span>
+                {% endif %}
+                </div>
+            {% endfor %}
+       {% else %}
+            {% include 'placeholder-section-banner' %}
+        {% endif %}
+    </section>
+{% endif %}    
+
+{% if settings.homepage_page_show %}
+    {% if homepage_page_position == 'middle' %}
+    <section class="homepage-page top wrapper">
+        {% let p = pages[settings.homepage_page.id] %}
+        <h2>{{ p.meta.h1 }}</h2>
+        <div class="rte">
+            {{ p.html }}
+        </div>
+    </section>
+    {% endif %}
+{% endif %}
+
+{% if settings.homepage_collection_slider_enabled %}
+    {% assign product_amount = settings.homepage_collection_amount %}
+    <section class="wrapper">
+    {% if settings.homepage_collection.id != empty %}
+        {% let c = collections[settings.homepage_collection.id] %}   
+        <h2 class="collection-title">{{ col.meta.h1 }}</h2>
+        <div class="grid fontpage-collection">
+    	{% if c.products.size > 0 %}
+    	    {% if c.products.size > 3 %}
+    	    <button type="button" class="slick-prev"><svg role="img" title="arrow left" class="arrow left"><use xlink:href="#arrow"/></svg></button>
+    	    <div class="collection_slider" data-slick='{"slidesToShow": 3, "slidesToScroll": 3, "arrows": true, "responsive": [ { "breakpoint": 768, "settings": { "slidesToShow": 2, "slidesToScroll": 2 } }, { "breakpoint": 480, "settings": {"slidesToShow": 2, "slidesToScroll": 2 } } ]}'>
+    	    {% endif %}
+        	{% for product in c.products limit: product_amount %}
+        		{% assign grid_item_width = 'large--one-third medium--one-half small--one-half' %}
+        		{% include 'product-card' %}
+        	{% endfor %}
+        	{% if c.products.size > 3 and settings.homepage_collection_slider_enabled %}
+            </div>
+            <button type="button" class="slick-next"><svg role="img" title="arrow right" class="arrow right"><use xlink:href="#arrow"/></svg></button>
+            {% endif %}
+    	{% else %}
+    		<div class="grid-item">
+    			<p><a href="/admin/products">{{ lang.no_products_found | def:'No products found' }}</a></p>
+    		</div>
+    	{% endif %}
+        </div>
+        <a class="collection-button" href="{{ c.url }}">{{ lang.browse }} {{ c.meta.h1 }}</a>
+    {% else %}	
+        <h2 class="collection-title">Display collection</h2>
+        <div class="grid fontpage-collection">
+            {% assign grid_item_width = 'large--one-third medium--one-half small--one-half' %}
+            {% include 'product-card' %}
+            {% include 'product-card' %}
+            {% include 'product-card' %}
+        </div>
+    {% endif %}
+    <hr>
+    {% if settings.homepage_collection_slider_enabled %}
+    <script type="text/javascript">
+        Array.prototype.map.call(document.getElementsByClassName("collection_slider"),(slider) => {
+            new Slick(slider,{
+                slidesToShow: 1,
+                dots: true,
+                infinite: true,
+                prevArrow: ".slick-prev",
+                nextArrow: ".slick-next",
+                autoplay: {{ settings.slideshow_autoplay | def: "false" }}
+            });
+        });
+    </script>
+    {% endif %}
+</section>
+{% endif %}
+
+{% if settings.homepage_featured_collections_enabled %}
+<section class="wrapper featured-collections">
+    <h2 class="collection-title">{{ lang.featured_collections | def:'Featured Collections' }}</h2>
+    <div class="grid-uniform">
+        {% if settings.homepage_featured_collections.size > 0 %}
+        {% for collection in settings.homepage_featured_collections | key:'featured_collection' %}
+            {% include 'collection-grid-item' %}
+        {% endfor %}
+        {% else %}
+            {% unless collection_item_width %}
+                {% assign collection_item_width = 'small--one-half medium--one-third large--one-fifth' %}
+            {% endunless %}
+            <div class="grid-item {{collection_item_width}} text-center">
+                <a href="/" class="collection-grid-image">
+                    <img loading="lazy" src="{{ 'placeholder.jpg' | asset_img_url: 'large' }}" alt="Placeholder image" >
+                </a>
+                <a href="/">
+                    A collection
+                </a>
+            </div>
+            <div class="grid-item {{collection_item_width}} text-center">
+                <a href="/" class="collection-grid-image">
+                    <img loading="lazy" src="{{ 'placeholder.jpg' | asset_img_url: 'large' }}" alt="Placeholder image" >
+                </a>
+                <a href="/">
+                    A collection
+                </a>
+            </div>
+            <div class="grid-item {{collection_item_width}} text-center">
+                <a href="/" class="collection-grid-image">
+                    <img loading="lazy" src="{{ 'placeholder.jpg' | asset_img_url: 'large' }}" alt="Placeholder image" >
+                </a>
+                <a href="/">
+                    A collection
+                </a>
+            </div>
+            <div class="grid-item {{collection_item_width}} text-center">
+                <a href="/" class="collection-grid-image">
+                    <img loading="lazy" src="{{ 'placeholder.jpg' | asset_img_url: 'large' }}" alt="Placeholder image" >
+                </a>
+                <a href="/">
+                    A collection
+                </a>
+            </div>
+            <div class="grid-item {{collection_item_width}} text-center">
+                <a href="/" class="collection-grid-image">
+                    <img loading="lazy" src="{{ 'placeholder.jpg' | asset_img_url: 'large' }}" alt="Placeholder image" >
+                </a>
+                <a href="/">
+                    A collection
+                </a>
+            </div>
+        {% endif %}
+    </div>
+    <hr>
+</section>
+{% endif %}
+{% comment %}
+	Loop through three recent blog articles with the following code.
+
+	Since we're not on the blog template, we need to define the blog
+	handle we want to focus on. For this example we'll use the default 'news',
+	but you can create a blog page-specific content if you want.
+{% endcomment %}
+{% if settings.homepage_blog_enabled %}
+    <section class="wrapper blog">
+        {% unless blogs[settings.homepage_blog.id] == empty %}
+        <h2>{{ blogs[settings.homepage_blog.id].meta.h1 }}</h2>
+        <div class="grid">
+        	{% for article in blogs[settings.homepage_blog.id].articles limit:3 %}
+        		<div class="grid-item large--one-third">
+        		    {% assign article_image = article.html | get_images | first %}
+        		    {% unless article_image == empty %}
+                    <div class="img-wrapper lazyload" data-bgset="{{ article_image.src | replace: ".png", "_0_500.png"  | replace: ".jpeg", "_0_500.jpeg" }}"></div>
+        			{% endunless %}
+        			<time pubdate datetime="{{ article.publishAt | date }}">
+        				{{ article.publishAt | date }}
+        			</time>
+        			<h3><a href="{{ article.url }}">{{ article.title }}</a></h3>
+        			<div class="rte">
+        			    {% let excerpt_text = article.excerpt | strip_html %}
+        				{% unless excerpt_text == "" %}
+        					{{ article.excerpt | strip_html }}
+        				{% else %}
+        					<p>{{ article.content | strip_html | truncatewords: 100 }}</p>
+        				{% endunless %}
+        			</div>
+        			<p><a href="{{ article.url }}">{{ lang.read_more | def:'Read more' }} &rarr;</a></p>
+        
+        		</div>
+        
+        	{% endfor %}
+        </div>
+        {% else%}
+        <h2>News posts</h2>
+        <div class="grid">
+    		<div class="grid-item large--one-third">
+                <div class="img-wrapper lazyload" data-bgset="{{ 'placeholder.jpg' | asset_img_url:'0','500' }}"></div>
+    			<time pubdate datetime="{{ "today" | date }}">{{ "today" | date }}</time>
+    			<h3><a href="/">My blogpost</a></h3>
+    			<div class="rte">
+    				<p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.</p>
+    			</div>
+    			<p><a href="/">{{ lang.read_more | def:'Read more' }} &rarr;</a></p>
+    		</div>
+    		<div class="grid-item large--one-third">
+                <div class="img-wrapper lazyload" data-bgset="{{ 'placeholder.jpg' | asset_img_url:'0','500' }}"></div>
+    			<time pubdate datetime="{{ "today" | date }}">{{ "today" | date }}</time>
+    			<h3><a href="/">My blogpost</a></h3>
+    			<div class="rte">
+    				<p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.</p>
+    			</div>
+    			<p><a href="/">{{ lang.read_more | def:'Read more' }} &rarr;</a></p>
+    		</div>
+    		<div class="grid-item large--one-third">
+                <div class="img-wrapper lazyload" data-bgset="{{ 'placeholder.jpg' | asset_img_url:'0','500' }}"></div>
+    			<time pubdate datetime="{{ "today" | date }}">{{ "today" | date }}</time>
+    			<h3><a href="/">My blogpost</a></h3>
+    			<div class="rte">
+    				<p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.</p>
+    			</div>
+    			<p><a href="/">{{ lang.read_more | def:'Read more' }} &rarr;</a></p>
+    		</div>
+        </div>
+        {% endunless %}
+    </section>
+{% endif %}
+
+{% if settings.homepage_page_show %}
+    {% if homepage_page_position == 'bottom' %}
+    <section class="homepage-page top wrapper">
+        {% let p = pages[settings.homepage_page.id] %}
+        <h2>{{ p.meta.h1 }}</h2>
+        <div class="rte">
+            {{ p.html }}
+        </div>
+    </section>
+    {% endif %}
+{% endif %}

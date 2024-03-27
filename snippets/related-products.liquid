@@ -1,0 +1,12 @@
+{% let number_of_products = 5 %}
+{% let number_of_products_to_fetch = number_of_products | plus: 1 %}
+
+<div class="wrapper gutter-top related-products">
+    <span class="h4">{{ lang.related_products | def:'Related Products' }}</span>
+    <div class="grid">
+    {% for product in products limit: number_of_products_to_fetch %}
+          {% assign grid_item_width = 'large--one-fifth medium--one-third small--one-half' %}
+          {% include 'product-card' with product:product %}
+    {% endfor %}
+    </div>
+</div>

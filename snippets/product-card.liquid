@@ -1,0 +1,104 @@
+{% comment %}
+	Check if the product is on sale and set a variable to be used below.
+{% endcomment %}
+{% assign on_sale = "" %}
+{% if product.compare_at_price > product.price and settings.products_compare_price_hide == false %}
+	{% let on_sale = "on-sale" %}
+{% endif %}
+{% unless grid_item_width %}
+	{% assign grid_item_width = 'small--one-half medium--one-third large--one-fifth' %}
+{% endunless %}
+
+
+{% assign sold_out = "" %}
+
+{% comment %}
+	Check if the product is sold out and set a variable to be used below.
+
+{% unless with_placeholder %}
+    {% assign sold_out = "" %}
+    {% unless product.available  %}
+    	{% assign sold_out = "sold-out" %}
+    {% endunless %}
+{% endunless %}
+
+{% endcomment %}
+
+{% assign has_many_images = false %}
+{% if product.images.size > 0 %}
+    {% assign has_many_images = true %}
+{% endif%}
+
+<div class="product-card {{ grid_item_width }} {{ on_sale }} {{ sold_out }}">
+  <div class="product-card--container">	
+	<strong class="sold-out-title hidden">{{ lang.sold_out | def:'Sold out'}}</strong>
+	<a href="/{{ product.url }}" aria-label="{{ product.title }}" class="product-card--header {{ settings.collection_product_image_size }} {% if settings.product_card_secondary_image_on_hover and has_many_images %}has-many-images{% endif%}" alt="{{ product.title }}">
+	    {% if product or product.featured_image.src %}
+    	    {% unless settings.product_card_secondary_image_on_hover and has_many_images %}
+                <div class="product-card--image-wrapper">
+                    <img loading="lazy" src="{{ product | product_img_url:'0', settings.product_card_image_height }}" alt="{{ image.alt | escape }}">
+        	    </div>
+    	    {% else %}
+    			<div class="product-card--image-wrapper">
+    			    <img loading="lazy" src="{{ product | product_img_url:'0', settings.product_card_image_height }}" alt="{{ image.alt | escape }}">
+                    {% for image in product.images | limit: 1 %}
+                    <img loading="lazy" src="{{ image | product_img_url:product, '0', settings.product_card_image_height }}" alt="{{ image.alt | escape }}">
+                    {% endfor %}
+                </div>                
+    	    {% endunless %}
+    	{% else %}
+    	    <div class="product-card--image-wrapper">
+    	        <img loading="lazy" src="{{ 'placeholder.jpg' | asset_img_url:'0', settings.product_card_image_height }}">
+    	    </div>
+    	{% endif %}
+	</a>
+	<a href="/{{ product.url }}" class="product-card--footer" alt="{{ product.title }}">
+    	<div class="{{ settings.collection_product_name_size }} {% if settings.product_card_info_pos == "center" %}text-center{% endif %}">
+    	    {% if settings.product_card_info_pos == "price-right" %}
+    	        <span class="product-price-wrapper">
+                    {% if product.price_varies %}{{ lang.from | def:'From' }}{% endif %}
+        		    {% if on_sale == "on-sale" %}
+        			<span class="product-compare-price h5">{{ product.price | money }}</span><br>
+        			<span class="product-org-price h6 small">{{ product.compare_at_price | money }}</span>
+        		    {% else %}
+            		<span class="product-price {% if on_sale %} on-sale{% endif %}">
+            		    {{ product.price | money }}
+            		</span>
+        		    {% endif %}
+        		</span>
+    	    {% endif %}
+    	    {% if settings.product_card_show_vendor %}
+    		<span class="vendor">
+    		{{ product.vendor | def: "Product vendor" }}
+        	</span>
+        	{% endif %}
+        	<span class="product-name">
+        	    {% unless settings.product_card_hide_vendor_in_title %}
+        	    {{ product.title | def: "Your product's name" }}
+        	    {% else %}
+        		{{ product.title | remove: product.vendor }}
+        		{% endunless %}
+        	</span>
+    		{% unless settings.product_card_info_pos == "price-right" %}
+    		<span class="product-price-wrapper--left">
+    		    {% if on_sale == "on-sale" %}
+    		    {% if product.price_varies %}{{ lang.from | def:'From' }}{% endif %}
+    			<span class="product-compare-price h5">{{ product.price | money }}</span>
+    			<span class="product-org-price h6 small">{{ product.compare_at_price | money }}</span>
+    		    {% else %}
+        		<span class="product-price {% if on_sale %} on-sale{% endif %}">
+        		    {{ product.price | def: 10 | money_with_currency }}
+        		</span>
+    		    {% endif %}
+    		</span>
+    		{% endunless %}
+    	</div>
+      {% if settings.product_card_show_review_stars%}
+    	  {% include: "review-stars" review_score:product.reviews_rating %}
+    	{% endif %}
+	</a>
+	{% if settings.product_card_size_variants_enabled %}
+	    {% include: 'size-variants' %}
+	{% endif %}
+  </div>
+</div>

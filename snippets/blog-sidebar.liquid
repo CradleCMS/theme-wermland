@@ -1,0 +1,32 @@
+{% comment %}
+    Recent blog posts
+{% endcomment %}
+<h4>{{ lang.recent_articles | def:'Recent Articles' }}</h4>
+{% assign current_article_id = article.id %}
+{% assign moreArticles = blogs[article.blogId].articles %}
+{% for article in moreArticles limit:6 %}
+    <p>
+        {% if current_article_id == article.id %}
+            {{ article.title }}
+        {% else %}
+        <a href="{{ article | url }}">{{ article.title }}</a>
+        {% endif %}
+        <br>
+         <small><time pubdate datetime="{{ article.publishAt | date }}">
+            <em>{{ article.publishAt | date }}</em>
+        </time></small>   
+    </p>
+{% endfor %}
+
+{% if article.tags.size > 0 %}
+<h4>{{ lang.categories | def:'Categories' }}</h4>
+<ul>
+    {% for tag in article.tags %}
+        {% if currentTags contains tag %}
+            <li>{{ tag }} <a href="/{{blog.url}}?tags={{ currentTags | remove:tag | join:'+' }}">&nbsp;&times;</a></li>
+        {% else %}
+            <li><a href="{{ blogs[article.blogId] | url }}?tags={{ currentTags | append:tag | join:'+' }}">{{ tag }}</a></li>
+        {% endif %}
+    {% endfor %}
+</ul>
+{% endif %}

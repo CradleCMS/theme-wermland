@@ -1,0 +1,17 @@
+<div class="wrapper">
+    {% include 'breadcrumbs' with collection_list_title %} 
+    <div class="grid gutter-top">
+    	<div class="grid-item large--two-thirds push--large--one-sixth">
+        {% if collections.size > 0 %}
+            <h1 class="h2 text-center">{{ lang.list_collections | def: 'Our Collections' }}</h1>
+            {% for collection in collections %}
+                {% unless collection.handle == 'frontpage' %}
+                    {% include 'collection-list-item' %}
+                {% endunless %}
+            {% endfor %}
+        {% else %}
+          <h1 class="h2 text-center">{{ lang.no_collections | def: 'There are no collections' }}</h1>
+        {% endif %}
+        </div>
+      </div>
+</div>

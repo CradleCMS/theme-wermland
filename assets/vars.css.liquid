@@ -1,0 +1,148 @@
+:root {
+    --color_primary: {{ settings.color_primary }};
+    --color_secondary: {{ settings.color_secondary }};
+    --color_cta: {{ settings.color_cta | def: "orange" }};
+    --color_body_text: {{ settings.color_body_text }};
+    --color_body_bg: {{ settings.color_body_bg }};
+    --color_borders: {{ settings.color_borders }};
+    --color_footer_bg: {{ settings.color_footer_bg }};
+    --color_footer_text: {{ settings.color_footer_text }};
+
+    // Helper colors
+    --disabledGrey: #f6f6f6; // $disabledGrey
+    --errorRed: #dc0000; // $errorRed
+    --successGreen: #0a942a; // $successGreen
+
+    // Radius
+    --radius: 0px;    
+        
+    {% if settings.header_position %}
+    --header_position: fixed;
+    {% else %}
+    --header_position: absolute;
+    {% endif %}
+    
+    --checkout_link_color: {{ settings.checkout_link_color | def: "#3d7dc1" }};
+    {% if settings.products_compare_price_hide %}
+    --products_compare_price_hide: none !important;
+    {% endif %}
+    
+    --checkout_background_color: {{ settings.checkout_background_color | def: "#FFFFFF"}};
+   
+    --color_review_stars: {{ settings.color_review_stars | def: "#fdbb00" }};
+    
+    --menu-bg-color: {{ settings.header_bg_color | def: "#FFF" }};    
+    --header-text-color: {{ settings.header_text_color | def: "#111" }};
+
+    {% unless settings.header_cart_price_enabled %}
+        --header_cart_price_enabled: none !important;
+    {% endunless %}
+
+    {% unless settings.header_icons_text_labels_enabled %}
+        --header_icons_text_labels_enabled: none;
+    {% endunless %}
+    
+    --headings_alignment: {{ settings.headings_alignment | def: "left" }};
+
+    // Body Font
+    
+    --base_font_size: {{ settings.base_font_size | def:"1.6rem" }};
+    --base_font_weight: {{ settings.base_font_weight | def: 300 }};
+     
+    {% unless settings.base_font_use_system_fonts %}
+        --bodyFontStack: {{ settings.base_font_family }};
+    {% else %}
+        --bodyFontStack: -apple-system, BlinkMacSystemFont, "Segoe UI",Roboto,arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    {% endunless %}    
+    
+    // Header Font
+    {% unless settings.base_font_use_system_fonts %}
+        --headerFontStack: {{ settings.header_font_family | def: "Arial, sans-serif" }};
+    {% else %}
+        --headerFontStack: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    {% endunless %}
+    
+    --headerFontWeight: {{ settings.header_font_weight | def: 500 }};
+    
+    
+    --main_nav_text_transform: {{ settings.main_nav_text_transform | def: "capitalize" }};
+    --main_nav_font_weight: {{ settings.main_nav_font_weight | def: "600" }};
+    --main_nav_font_size: {{ settings.main_nav_font_size | def: "15px" }};
+    
+    --slideshow_headings_color: {{ settings.slideshow_headings_color | def: "#fff" }};
+    
+    --section_banner_image_max_width: {{ settings.section_banner_image_max_width | def:"100%" }};
+    --section_banner_title_position: {{ settings.section_banner_title_position | def:"left" }};
+    --section_banner_header_text_transform: {{ settings.section_banner_header_text_transform | def:"none" }};
+
+    --homepage_featured_collections_image_size: {{ settings.homepage_featured_collections_image_size | def: "96" }}px;
+    --homepage_page_align: {{ settings.homepage_page_align | def: "left" }};
+    
+    {% if settings.product_card_shadow_enabled %}
+        --product_card_shadow: 0 5px 20px -1px rgba(0,0,0,.06);
+    {% else %}
+        --product_card_shadow: 0;
+    {% endif %}
+    
+    {% if settings.product_card_image_background_color_enabled %}
+    --product_card_background_color: {{ settings.product_card_background_color | def: "#fff" }};
+    {% endif %}
+    --product_card_image_height_ratio: {{ settings.product_card_image_height_ratio | def: "100%"}};
+    
+    --product_card_image_padding: {{ settings.product_card_image_padding | def: "0" }};
+    --product_card_footer_padding: {{ settings.product_card_footer_padding | def: "0"}};
+
+    {% if settings.collection_product_name_uppercase %}    
+    --settings.collection_product_name_uppercase: uppercase;
+    {% endif %}
+    
+    --product_card_title_lines: 1.2em * {{ settings.product_card_title_lines }};
+    
+    --color_footer_social_link: {{ settings.color_footer_social_link }};
+
+    /*==============================================================================
+        Responsive Grid Settings (based on csswizardry)
+    ==============================================================================*/
+    /*
+    $global-font-size: 14px;
+    
+    Cannot be used to set widths in the media querry!
+    --small: 480px; 
+    --medium: 768px;
+    --large: 769px; 
+
+    $siteWidth: 1200px;
+    $gridGutter: 24px; 
+    */
+
+
+
+}
+
+
+
+/*==============================================================================
+    Memo for conversion 
+==============================================================================*/
+
+/* Example color: var(--checkout_link_color); */
+
+/* ----------------------------------------------
+Removed some for later consideration
+
+settings.main_nav_on_own_row is considered to be off and thus the main nav is on the same row.
+settings.main_nav_pos is left
+settings.main_nav_mega_menu is untrue
+settings.logo_position is left
+logo_mobile_position is center
+settings.search_pos is right
+settings.search_input_state is closed
+settings.header_icons_text_labels_enabled is untrue
+settings.slideshow_full_width is untrue
+settings.product_card_image_random_background_color_enabled is untrue
+settings.product_card_image_mix_mode_enabled is untrue
+settings.product_card_info_pos is left
+settings.header_font_google is untrue
+settings.headings_use_google_fonts is untrue
+
+---------------------------------------------- */

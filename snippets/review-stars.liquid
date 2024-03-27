@@ -1,0 +1,13 @@
+{% if review_score > 0 %}
+{% let star_height = star_height | def: "18" %}
+<div class="review-stars">
+    <div class="review-stars-wrapper" style="width:{{ star_height | times: 5 }}px; height: {{ star_height | minus: 1 }}px;">
+        <svg class="svg-star" width="{{ star_height | times: 5 }}px" height="{{ star_height }}px" viewBox="0 0 90 18" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+            <path fill="{{ bg_color | def: "#fff"}}" d="M0,0 L18,0 L18,18 L0,18 L0,0 Z M9,13.6681731 L13.944272,17 L12.4584705,11.0261367 L17,7.111456 L11.1374524,6.75123273 L9,1 L6.86254764,6.75123273 L1,7.111456 L5.54152945,11.0261367 L4.055728,17 L9,13.6681731 Z M18,0 L36,0 L36,18 L18,18 L18,0 Z M27,13.6681731 L31.944272,17 L30.4584705,11.0261367 L35,7.111456 L29.1374524,6.75123273 L27,1 L24.8625476,6.75123273 L19,7.111456 L23.5415295,11.0261367 L22.055728,17 L27,13.6681731 Z M36,0 L54,0 L54,18 L36,18 L36,0 Z M45,13.6681731 L49.944272,17 L48.4584705,11.0261367 L53,7.111456 L47.1374524,6.75123273 L45,1 L42.8625476,6.75123273 L37,7.111456 L41.5415295,11.0261367 L40.055728,17 L45,13.6681731 Z M54,0 L72,0 L72,18 L54,18 L54,0 Z M63,13.6681731 L67.944272,17 L66.4584705,11.0261367 L71,7.111456 L65.1374524,6.75123273 L63,1 L60.8625476,6.75123273 L55,7.111456 L59.5415295,11.0261367 L58.055728,17 L63,13.6681731 Z M72,0 L90,0 L90,18 L72,18 L72,0 Z M81,13.6681731 L85.944272,17 L84.4584705,11.0261367 L89,7.111456 L83.1374524,6.75123273 L81,1 L78.8625476,6.75123273 L73,7.111456 L77.5415295,11.0261367 L76.055728,17 L81,13.6681731 Z" id="Combined-Shape"></path>
+        </svg>
+        <div class="review-meter" style="width: calc({{ review_score }} / 5 * 100%); height: {{ star_height }}px;"></div>
+        <div class="review-meter--background" style="height:{{ star_height }}px;"></div>
+    </div>
+    {% if reviews %}<a href="#reviews" class="review-text">{{ reviews }} {% if show_text and reviews == 1 %}{{ lang.review_singular | def:'review' }}{% elseif show_text %}{{ lang.review_plural | def:'reviews' }}{% endif %}</a>{% endif %}
+</div>
+{% endif %}

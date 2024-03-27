@@ -1,0 +1,132 @@
+{% include 'structured-data' %}
+{% assign add_to_cart = lang.add_to_cart | def:'Add to Cart' %}
+{% assign sold_out = lang.sold_out | def:'Sold Out' %}
+{% assign on_sale = lang.on_sale | def:'On Sale' %}
+{% assign unavailable = lang.unavailable_combination | def:'Unavailable combination' %}
+{% assign max_image_size = "1024_1024" %}
+{% assign featured_image_size = 'grande' %}
+{% assign thumb_image_size = 'large' %}
+{% assign product_recommendations_position = settings.product_recommendations_position %}
+{% assign selectedVariant = product.selectedVariant %}
+{% assign variant = selectedVariant %}
+<div x-data="{variant: '{{variant.id}}', image:'{{variant.image | def:product.featuredImage.src | product_img_url: max_image_size }}'}" class="wrapper">
+    {% include 'breadcrumbs' %}
+    <div class="grid">
+        {% if product.images.size > 0 %}
+        <div id="product-images" class="grid-item large--three-fifths text-center">
+            <div class="product-photo-container">
+                {% if selectedVariant.image.src %}
+                <img  id="productPhoto" alt="{{ selectedVariant.image.alt }}" src="{{ selectedVariant.image.src | max_image_size }}" :src="image" x-ref="image">
+                {% else %}
+                <img  id="productPhoto" alt="{{ product.featuredImage.alt }}" src="{{ product.featuredImage | product_img_url:max_image_size }}" :src="image" x-ref="image">
+                {% endif %}
+            </div>
+            {% if product.images.size > 1 %}
+            <div class="product-photo-thumbs">
+                <div>
+                <img alt="{{ product.featuredImage.alt }}" id="{{ product.featuredImage.src}}" src="{{ product | product_img_url:'thumb' }}" data-src="{{ product.featuredImage | product_img_url:max_image_size }}" @click.prevent="image = $event.target.getAttribute('data-src')" :class="{'selected':image == $el.getAttribute('data-src')}">
+                </div>
+                {% for image in product.images %}
+                {% if image.src == product.featuredImage.src %}{% continue %}{% endif %}
+                <div><img alt="{{ image.alt }}" id="{{image.src}}" src="{{ image | product_img_url:'thumb' }}" data-src="{{ image | product_img_url:max_image_size }}"  @click.prevent="image = $event.target.getAttribute('data-src')" :class="{'selected':image == $el.getAttribute('data-src')}"></div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+        {% endif %}
+        <div class="product-select grid-item {% if product.images.size > 0 %}large--two-fifths{% else %}large--one-half push--one-quarter{% endif %}">
+            <h1 class="h3">{{ meta.h1 }}</h1>
+            
+            <div>
+                {% assign hide_default_title = false %}
+                {% if product.keyFeatures.size > 0 %}
+                <ul class="key-features">
+                    {% for keyFeature in product.keyFeatures %}
+                    <li>
+                        {{ keyFeature }}
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+                {% if product.html.size > 0 %}
+                <div class="product-description rte">
+                    {{ product.html }}
+                </div>
+                {% endif %}
+                {% form 'cart_add' %}
+                    <input type="hidden" name="product" value="{{product.id}}">
+                    <span id="product-price" class="h4">
+                        {% for v in product.variants %}
+                            <div x-show="variant=='{{v.id}}'">
+                            {% if v.compareAtPrice > v.price %}
+                                <span class="product-price on-sale">{{ v.price | money_with_currency }}</span>
+                                <s class="product-compare-price">{{ v.compareAtPrice | money_with_currency }}</s>
+                            {% else %}
+                                <span class="product-price">{{ v.price | money_with_currency }}</span>
+                            {% endif %}
+                            </div>
+                        {% endfor %}
+                    </span>
+                   {% if product.variants.size > 1 %}
+                    <div>
+                        <select x-model="variant" name="id" id="product-select" @change.prevent="let i=$event.target.options[$event.target.selectedIndex].getAttribute('data-img'); if(i) image = document.getElementById(i).getAttribute('data-src')" class="product-variants" >
+                        {% for v in product.variants %}
+                            <option data-img="{{v.image}}" 
+                                {% if v.id == product.selectedVariant.id %}selected="selected"{% endif %} 
+                                {% unless v.available %}disabled="disabled"{% endunless %} 
+                                value="{{ v.id }}">
+                                    {{ v.title }}{% unless v.available %} - {{ sold_out }}{% endunless %}
+                            </option>
+                        {% endfor %}
+                        </select>
+                    </div>
+                    {% endif %}
+                    
+                    <div id="backorder" class="hidden">
+                        <p>{{ lang.x_is_backordered | def:'%s is back-ordered. We will ship it separately in 10 to 15 days.' | insert: '<span id="selected-variant"></span>' }}</p>
+                    </div>
+                    {% if settings.product_quantity_selector %}
+                    <label for="quantity">{{ lang.quantity | def: 'Quantity' }}</label>
+                    <div class="input-group quantity-selector-wrapper">
+                        <span class="input-group-btn">
+                            <a class="btn" data-type="minus" @click.prevent="(!$refs.q.getAttribute('min') || $refs.q.value > parseInt($refs.q.getAttribute('min'))) && $refs.q.value--">-</a>
+                        </span>
+                        <input type="text" id="quantity" name="quantity" value="1" min="1" class="quantity-selector input-group-field" x-ref="q" @change.prevent="let t=$event.target,v=t.value, min = t.getAttribute('min'), max = t.getAttribute('max'); t.value = (min && v < min) ? min : v; t.value = (max && v > max) ? max : t.value;">
+                        <span class="input-group-btn">
+                            <a class="btn" data-type="plus" @click.prevent="(!$refs.q.getAttribute('max') || $refs.q.value < parseInt($refs.q.getAttribute('max'))) && $refs.q.value++">+</a>
+                        </span>
+                    </div>
+                    {% endif %}
+                    {% if settings.product_add_to_cart %}
+                    <div>
+                        <button type="submit" name="add" id="add" class="btn btn-primary">
+                            <span class="default-state">{% if product.available %}{{ add_to_cart }}{% else %}{{ sold_out }}{% endif %}</span>
+                            <span class="adding-state"><svg role="img" title="spinner" class="spinner"><use xlink:href="#spinner"/></svg></span>
+                            <span class="added-state">Added</span>
+                            <span class="error-state">Error</span>
+                        </button>
+                    </div>
+                    {% endif %}
+                {% endform %}
+            </div>
+        </div>
+    </div>
+    {% if product.collections.size > 0 or settings.product_related %}
+    <div class="grid">
+        {% if product.collections.size > 0 %}
+            <div class="grid-item medium--one-half large--three-fifths product-description rte">
+                <strong>{{ lang.more | def:'More' }}:</strong>             
+                    | {{ product.collections.collection }} | <a href="{{ collection.url }}?type={{ product.type | handleize }}">{{ product.type }}</a>
+                <hr>
+            </div>
+        {% endif %}
+        {% if settings.product_related %}
+            {% assign relatedProducts = product | related %}
+            {% if relatedProducts.products.size > 0 %}
+                {% include 'related-products' with products:relatedProducts.products pos:product_recommendations_position %}
+            {% endif %}
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+

@@ -1,0 +1,12 @@
+{% if form.errors %}
+    <div class="note form-error">
+        <p>{{ lang.sorry_something_went_wrong | def: 'Sorry, looks like something went wrong. Please correct the following and submit again:' }}</p>
+        <ul>
+        {% for field in form.errors %}
+            <li>
+            <strong>{{ field }}</strong>
+            </li>
+        {% endfor %}
+        </ul>
+    </div>
+{% endif %}

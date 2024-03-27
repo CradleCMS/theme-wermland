@@ -1,0 +1,58 @@
+<footer class="site-footer wrapper" role="contentinfo">
+    {% if settings.footer_newsletter_enable %}
+        <section class="wrapper newsletter">
+            <div class="newsletter-frame">
+            	<div class="newsletter--content medium--two-thirds large--one-half">
+        			<h3>{{ lang.newsletter | def:'Newsletter' }}</h3>
+        			{% form 'newsletter' %}
+        			    {% include 'form-errors-custom' %}
+                        {% if form.success %}
+                        <p class="note form-success">
+                            {{ lang.thanks_for_subscribing | def: 'Thank you for subscribing to our newsletter!' }}
+                        </p>
+                        {% else %}
+                            <label class="hidden-label">{{ lang.fill_in_your_email | def:'Fill in your e-mail' }}</label>
+                            <div class="input-group">
+                                <input type="email" value="{% if customer %}{{ customer.email }}{% endif %}" placeholder="{{ lang.fill_in_your_email | def:'yourname@domain.com' | escape }}" name="email" class="input-group-field{% if form.errors contains 'email' %} error{% endif %}" autocorrect="off" autocapitalize="off">
+                                <span class="input-group-btn">
+                                    <input type="submit" class="btn" value="{{ lang.subscribe | def:'Subscribe' | escape }}" name="subscribe">
+                                </span>
+                            </div>
+                        {% endif %}
+                    {% endform %}
+            	</div>
+        	</div>
+        </section>
+    {% endif %}
+	<div class="grid wrapper">
+        <div class="grid-item small--one-whole medium--one-half large--three-tenths">
+            {% unless settings.footer_about_shop == ""%}
+			<p>
+			    {{ settings.footer_about_shop }}
+			</p>
+		    {% endunless %}
+		</div>
+		{% if settings.footer_quicklinks_enable %}
+            {% for linkList in settings.footer_linklists | key:"footer_linklist" %}
+                <div class="grid-item small--one-whole medium--one-quarter large--two-tenths">
+				   <ul>
+				      {% for link in navigation[linkList.id].links %}
+					    <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+				      {% endfor %}
+				   </ul>
+		        </div>
+            {% endfor %}
+		{% endif %}
+        {% if settings.footer_social_enable %}
+            <div class="grid-item small--one-whole medium--one-half large--two-tenths">
+    			{% include 'social-links' %}
+            </div>
+            <hr class="hr--clear">
+        {% endif %}
+	</div>
+    <div class="wrapper grid small--text-center">
+        <div class="grid-item small--one-whole one-half">
+            <small>&copy; {{ site.createdAt | date:'%Y' }} {{ site.name }}</small>
+        </div>
+    </div>
+</footer>

@@ -1,0 +1,58 @@
+{% comment %}
+List out your main-menu navigation (default)
+More info on navigations:
+{% endcomment %}
+{% assign man-nav = settings.main_nav_linklist | def: "main-menu" %}
+<div class="main-nav--wrapper">
+    <div class="nav-header">
+        <a class="logo" href="/">
+            {% if settings.logo_use_image %}
+                <img src="{{ 'logo.png' | asset_url }}" alt="logo" tabindex="1">
+            {% else %}
+    			 <span>{{ site.name }}</span>
+    		{% endif %}
+        </a>
+        <div class="close-menu--wrapper" @click.prevent="showSideMenu = false">
+            <svg role="img" title="cancel-sign" class=""><use xlink:href="#cancel-sign"/></svg>
+	    </div>
+    </div>
+
+    <ul class="main-nav" role="navigation" tabindex="1">
+    	{% for link in navigation[man-nav].links %}
+    		{% comment %}
+    			Create a dropdown menu if link type if navigation
+    		{% endcomment %}
+    		{% if link.type == 'navigation' and navigation[link.param].links.size > 0 %}
+    		<li class="{% if link.active %} main-nav--active{% endif %} {{ link.type }}" aria-haspopup="true">
+    		    <input type="checkbox" id="{{ link.handle }}-{{ forloop.index }}">
+    			<label for="{{ link.handle }}-{{ forloop.index }}">
+    			    {{ link.title }}
+    			</label>
+    			<label for="{{ link.handle }}-{{ forloop.index }}">
+    			    <svg role="img" title="arrow right" class="arrow small down"><use xlink:href="#arrow"/></svg>
+    			</label>
+    			<ul class="main-nav---mini-dropdown" aria-label="submenu">
+    			{% for childlink in navigation[link.param].links %}
+    				<li {% if childlink.active %}class="main-nav--active"{% endif %}>
+    				    {% if settings.main_nav_mega_menu and collections[childlink.handle] %}
+    				        <a href="{{ childlink.url }}"><strong>{{ childlink.title | escape }}</strong></a>
+    				        {% for type in collections[childlink.handle].all_types %}
+    				        <div class="collection-types">
+    				            <a href="{{ childlink.url }}?type={{ type | handleize }}">{{ type }}</a>
+    				        </div>
+    				        {% endfor %}
+    				    {% else %}
+    				        <a href="{{ childlink.url }}">{{ childlink.title | escape }}</a>
+    				    {% endif %}
+    				</li>
+    			{% endfor %}
+    			</ul>
+    		</li>
+    		{% else %}
+    			<li class="{% if link.active %}main-nav--active {% endif %} {{ link.type }}">
+    				<a href="{{ link.url }}">{{ link.title }}</a>
+    			</li>
+    		{% endif %}
+    	{% endfor %}
+    </ul>
+</div>

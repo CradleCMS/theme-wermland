@@ -1,0 +1,35 @@
+<div itemprop="reviews" class="review" itemscope itemtype="http://schema.org/Review">
+    <div class="review-header">
+        {% include: "review-stars" review_score:product.reviews_rating, star_height: "12" %}
+        <strong class="h5" itemprop="name">{{ review.title }}</strong>
+    </div>
+    <meta content="{{ review.author }}" itemprop="author">
+    <meta content="{{ review.created_at | date: 'Y-m-d' }}" itemprop="dateCreated">
+    <div class="rte" itemprop="description">
+        {{ review.body }}<br>
+        <small>
+            ({{ review.author }})
+            {% if shop.product_reviews_moderated %}
+                <svg width="14px" height="14px" viewBox="0 0 14 14" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                        <g id="shield">
+                            <path d="M0.54168306,1.84572914 C0.640642211,7.33759451 2.79096356,11.1752175 6.99994188,13.4268182 C11.2085641,11.1803284 13.3587428,7.34278438 13.4576059,1.84573056 L6.99964103,0.512461826 L0.54168306,1.84572914 Z" id="Path" stroke="#009030"></path>
+                            <polygon id="Path" fill="#009030" fill-rule="nonzero" points="4.6948 6.3156 4 6.9276 6.256 9 10 3.4548 9.1684 3 6.0748 7.584"></polygon>
+                        </g>
+                    </g>
+                </svg>
+            {% endif %}
+        </small>
+    </div>
+    <div itemtype="http://schema.org/Rating" itemscope="" itemprop="reviewRating">
+        <meta content="1" itemprop="worstRating" />
+        <meta content="5" itemprop="bestRating" />
+        <meta content="{{ review.rating }}" itemprop="ratingValue" />
+    </div>
+    {% if review.reply > 0 %}
+        <div class="review-answer">
+            <small class="h6">{{ shop.name }}</small>
+            <p>{{ review.reply }}</p>
+        </div>
+    {% endif %}
+</div>

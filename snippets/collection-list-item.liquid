@@ -1,0 +1,14 @@
+<div class="section-header">
+    <p class="h1 section-header--left">{{ collection.title }}</p>
+    <div class="section-header--right">
+        <a href="/{{ collection.url }}">{{ lang.browse | def: 'Browse'}} {{ collection.title }} &rsaquo;</a>
+    </div>
+</div>
+<div class="wrapper">
+    <div class="grid">
+    {% for product in collection.products limit:5 %}
+        {% assign grid_item_width = 'large--one-quarter medium--one-half small--one-half' %}
+        {% include 'product-card' %}
+    {% endfor %}
+    </div>
+</div>

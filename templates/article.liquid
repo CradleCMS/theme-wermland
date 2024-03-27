@@ -1,0 +1,55 @@
+<div class="wrapper"> 
+    {% include 'breadcrumbs' %}
+    <div class="grid">
+    	<article class="grid-item large--two-thirds" itemscope itemtype="https://schema.org/Article">
+    		<header class="section-header">
+    			<div class="section-header--left">
+    				<h1 itemprop="name">{{ meta.h1 }}</h1>
+    				<small>{{ lang.publised | def:'Article published'}}
+    				    <time itemprop="datePublished" datetime="{{ article.publishAt | date }}">
+    						{{ article.publishAt | date }}
+    					</time>
+    					{% unless article.updatedAt == article.publishAt %}
+    					{{ lang.updated | def:'and updated'}} <span itemprop="dateModified">{{ article.updatedAt | date }}</span>
+    				    {% endunless %}
+    				</small>
+    			</div>
+    		</header>
+    		<div class="rte" itemprop="articleBody">
+    			{{ article.html }}
+    		</div>
+    		<ul>
+     			{% if article.tags.size > 0 %}
+                    <li>
+                        <span>{{ lang.tagged | def:'Tagged' }}:</span>
+                        {% for tag in article.tags %}
+                            <a href="{{ blogs[article.blogId] | url }}?tags={{ tag }}">{{ tag }}</a>{% unless forloop.last %}, {% endunless %}
+                        {% endfor %}
+                    </li>
+                {% endif %}
+    		</ul>
+    		{% if article.nextUrl or article.previousUrl %}
+    		<hr>
+    		{% comment %}
+    			If you only have elements floated in a container, you can use the
+    			.clearfix class to force the parent to maintain its structure.
+    		{% endcomment %}
+    		<p class="clearfix">
+    			{% if article.previousUrl %}
+    				<span class="left">
+    				    <a href="{{ article.previousUrl }}">&larr; {{ lang.older_post | def:'Previous Post'}}</a>
+    				</span>
+    			{% endif %}
+    			{% if article.nextUrl %}
+    				<span class="right">
+    					<a href="{{ article.nextUrl }}">{{ lang.newer_post | def:'Newer Post'}} &rarr;</a>
+    				</span>
+    			{% endif %}
+    		</p>
+    		{% endif %}
+    	</article>
+    	<aside class="grid-item large--one-third" role="complementary">
+    		{% include 'blog-sidebar' %}
+    	</aside>
+    </div>
+</div>
