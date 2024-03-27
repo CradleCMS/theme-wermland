@@ -1,1 +1,1 @@
-# Default theme to Cradle CMS
+# Cradle CMS default theme
