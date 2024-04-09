@@ -47,8 +47,8 @@
                 </div>                
     	    {% endunless %}
     	{% else %}
-    	    <div class="product-card--image-wrapper">
-    	        <img loading="lazy" src="{{ 'placeholder.jpg' | asset_img_url:'0', settings.product_card_image_height }}">
+    	    <div class="product-card--image-wrapper" style="display: flex;padding: 30px;justify-content: center;align-content: center;">
+    	        {{ 'products' | holder }}
     	    </div>
     	{% endif %}
 	</a>

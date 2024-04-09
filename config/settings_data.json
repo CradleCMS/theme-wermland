@@ -120,9 +120,9 @@
       "section_banner1": [],
       "section_banner1_show": true,
       "section_banner2": [],
-      "section_banner2_show": true,
+      "section_banner2_show": false,
       "section_banner3": [],
-      "section_banner3_show": true,
+      "section_banner3_show": false,
       "section_banner_header_text_transform": "none",
       "section_banner_row_1": [],
       "section_banner_row_2": [],
@@ -137,23 +137,7 @@
       "slideshow_full_width": true,
       "slideshow_headings_bgcolor": "#050128",
       "slideshow_headings_color": "#ffffff",
-      "slideshow_slides": [
-        {
-          "id": 0,
-          "slide_button_alignment": "",
-          "slide_button_caption": "",
-          "slide_content_horizontal_pos": "",
-          "slide_content_vertical_pos": "",
-          "slide_heading": "",
-          "slide_image": "",
-          "slide_link_url": "",
-          "slide_text": "",
-          "undefined": {
-            "filename": "slide_0_100_100.jpg?710",
-            "id": "0"
-          }
-        }
-      ],
+      "slideshow_slides": [],
       "social_icons_color": false,
       "social_icons_style": "",
       "social_sharing_count": true,

@@ -3,7 +3,6 @@
 {% if settings.show_slideshow %}
     {% let slides = settings.slideshow_slides %}
     <section class="hero-slider">
-        
         {% if slides.size > 0 %}
             <div class="{% if slides.size > 1 %}slider{% endif %}">
                 {% for slide in settings.slideshow_slides %}
@@ -28,21 +27,14 @@
                 {% endfor %}
             </div>
         {% else %}
-            <div class="">
-                <a class="slide-link lazyload" href="#" data-bgset="{{ '/holder/collections.svg#clothes' }}" style="background-color: #fafafa; background-size: 100%;">
+            <div>
+                <a class="slide-link lazyload" href="/" data-bgset="" style="background-color: #fafafa; background-size: 100%;">
                     <div class="wrapper v-pos-center h-pos-center">
-                        <div class="slide-text-wrapper text-align-center">
-                            <span class="h1">Image slide</span>
-                            <p>Tell your brand's story through video and images</p>
-                            <div class="slide-btn-wrapper text-center">
-                                <span class="">Read more</span>
-                            </div>
-                        </div>
+                        {{ 'images' | holder:'image' }}
                     </div>
                 </a>
             </div>
         {% endif %}
-
     </section>
     
     {% if slides.size > 1 %}
