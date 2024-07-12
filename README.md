@@ -1,1 +1,1 @@
-# Cradle CMS default theme
+# Cradle eCommerce default theme
